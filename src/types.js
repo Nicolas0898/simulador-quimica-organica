@@ -44,6 +44,11 @@ export class Point{
         return Math.sqrt(Math.pow(this.x,2),Math.pow(this.y,2))
     }
 
+    snap(gridsize,offset){
+        this.x = Math.round((this.x - offset??0)/gridsize)*gridsize + offset??0
+        this.y = Math.round((this.y - offset??0)/gridsize)*gridsize + offset??0
+    }
+
     /**
      * @param {number} x
      * @param {number} y  

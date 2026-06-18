@@ -116,4 +116,8 @@ export class CameraHandler {
     getZoom() {
         return this.zoom
     }
+
+    add(element){
+        this.camera.appendChild(element)
+    }
 }

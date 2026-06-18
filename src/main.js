@@ -1,31 +1,65 @@
 import './style.css'
 import { svgNS, Point} from './types'
-import { CameraHandler } from './viewport/camera'
-import { KeybindHandler } from './viewport/keybindHandler'
+import { CameraHandler } from './user/camera'
+import { KeybindHandler } from './user/keybindHandler'
 
 const app = document.getElementById("app")
-
+const gridsize = 40
 const camera = new CameraHandler(app)
 const keybinds = new KeybindHandler(window)
 
 keybinds.addBehaviour(
   "Space",
-  e=> camera.dragging = true ,
-  e=> camera.dragging = false
+  e=>{
+    camera.dragging = true 
+    camera.camera.style.cursor = "move";
+  },
+  e=> {
+    camera.dragging = false
+    camera.camera.style.cursor = "default";
+  }
 )
+
+let startpoint
+let line
+function updateLine(pos){
+    line.setAttribute("x1",startpoint.x)
+    line.setAttribute("y1",startpoint.y)
+    line.setAttribute("x2",pos.x)
+    line.setAttribute("y2",pos.y)
+    line.setAttribute("stroke-width",2)
+    line.setAttribute("stroke","black")
+}
+
 
 keybinds.addBehaviour(
-  "KeyE",
+  "0",
   (e)=> {
-    console.log(camera.mousePosition)
-    let dot = document.createElementNS(svgNS,"circle")
+    if(camera.dragging) return
     let pos = camera.getPositionInWorld(camera.mousePosition)
-    dot.setAttribute("r",2)
-    dot.setAttribute("cx",pos.x)
-    dot.setAttribute("cy",pos.y)
+    startpoint = pos
+    pos.snap(gridsize,10)
 
-    camera.camera.appendChild(dot)
-  } 
+    line = document.createElementNS(svgNS,"line")
+    camera.add(line)
+    
+  },
+  (e)=>{
+    if (!line) return
+    let pos = camera.getPositionInWorld(camera.mousePosition)
+    pos.snap(gridsize,10)
+    updateLine(pos)
+    line = null
+    
+  }
 )
+
+window.addEventListener("mousemove",()=>{
+    if(line){
+      let pos = camera.getPositionInWorld(camera.mousePosition)
+      pos.snap(gridsize,10)
+      updateLine(pos)
+    }
+})
 
 // camera.setZoom(2)

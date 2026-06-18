@@ -22,14 +22,19 @@ export class KeybindHandler{
 
         this.app.addEventListener("keydown",this.keydown.bind(this))
         this.app.addEventListener("keyup",this.keyup.bind(this))
+        this.app.addEventListener("mousedown",this.keydown.bind(this))
+        this.app.addEventListener("mouseup",this.keyup.bind(this))
+
+        this.app.addEventListener('contextmenu', e => e.preventDefault(), { capture: true });
+
     }
 
     keydown(e){
-        this.actions[e.code]?.downBehaviour?.(e)
+        this.actions[e.code??e.button]?.downBehaviour?.(e)
     }
 
     keyup(e){
-        this.actions[e.code]?.upBehavior?.(e)
+        this.actions[e.code??e.button]?.upBehavior?.(e)
     }
 
     addBehaviour(code,downBehaviour,upBehavior){
