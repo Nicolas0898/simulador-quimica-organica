@@ -7,6 +7,7 @@ export class CameraHandler{
     svg
     enabled=true
     zoom = 1
+    background = document.getElementById("background")
 
     getSVGCoords(event) {
         const point = this.svg.createSVGPoint();
@@ -26,30 +27,6 @@ export class CameraHandler{
         console.log("asa")
         this.svg = svg
 
-        var circle = document.createElementNS(svgNS,"circle")
-        circle.setAttribute("r",5)
-        this.camera.appendChild(circle)
-        
-        var circle2 = document.createElementNS(svgNS,"circle")
-        circle2.setAttribute("r",5)
-        circle2.setAttribute("fill","blue")
-        this.camera.appendChild(circle2)
-
-        var circle3 = document.createElementNS(svgNS,"circle")
-        circle3.setAttribute("r",5)
-        circle3.setAttribute("fill","green")
-        this.camera.appendChild(circle3)
-       
-        var circle4 = document.createElementNS(svgNS,"circle")
-        circle4.setAttribute("r",5)
-        circle4.setAttribute("fill","pink")
-        this.camera.appendChild(circle4)
-        
-        var circle5 = document.createElementNS(svgNS,"circle")
-        circle5.setAttribute("r",5)
-        circle5.setAttribute("fill","lightgreen")
-        this.camera.appendChild(circle5)
-
         this.svg.addEventListener("mousedown",e=>{
             let mousepos = this.getSVGCoords(e)
             this.lastpos = mousepos
@@ -65,15 +42,6 @@ export class CameraHandler{
             let finalPos = {x:(mousepos.x)/(this.zoom*factor) - this.camerapos.x,y:(mousepos.y)/(this.zoom*factor) - this.camerapos.y} 
             let targetPos = {x:(mousepos.x)/(this.zoom) - this.camerapos.x,y:(mousepos.y)/(this.zoom) - this.camerapos.y} 
 
-            console.log(mousepos,finalPos)
-
-            var testc = document.createElementNS(svgNS,"circle")
-            testc.setAttribute("r",1)
-            testc.setAttribute("fill","purple")
-            testc.setAttribute("cx",targetPos.x)
-            testc.setAttribute("cy",targetPos.y)
-            this.camera.appendChild(testc)
-
             this.camerapos.x += finalPos.x-targetPos.x
             this.camerapos.y += finalPos.y-targetPos.y
             this.setZoom(this.zoom*factor)
@@ -85,21 +53,6 @@ export class CameraHandler{
         const rect = this.svg.getBoundingClientRect();
         let mousepos = this.getSVGCoords(e)
         
-        circle.setAttribute("cx",mousepos.x)
-        circle.setAttribute("cy",mousepos.y)
-        console.log(mousepos)
-        
-        circle3.setAttribute("cx",-this.camerapos.x)
-        circle3.setAttribute("cy",-this.camerapos.y)
-
-        circle2.setAttribute("cx",(mousepos.x)/this.zoom - this.camerapos.x)
-        circle2.setAttribute("cy",(mousepos.y)/this.zoom - this.camerapos.y)
-
-        circle4.setAttribute("cx",(mousepos.x)/(this.zoom * 1.05) - this.camerapos.x)
-        circle4.setAttribute("cy",(mousepos.y)/(this.zoom * 1.05) - this.camerapos.y)
-
-        circle5.setAttribute("cx",(mousepos.x)/(this.zoom / 1.05) - this.camerapos.x)
-        circle5.setAttribute("cy",(mousepos.y)/(this.zoom / 1.05) - this.camerapos.y)
         if(e.buttons==1){
             console.log()
             let diff = {x:mousepos.x-this.lastpos.x,y:mousepos.y-this.lastpos.y}
@@ -115,6 +68,11 @@ export class CameraHandler{
 
     update(){
         this.camera.setAttribute("transform",`scale(${this.zoom},${this.zoom}) translate(${this.camerapos.x},${this.camerapos.y})`)
+        // this.background.setAttribute("width",40*this.zoom)
+        // this.background.setAttribute("height",40*this.zoom)
+        console.log(this.svg.clientHeight)
+        this.background.setAttribute("x",-(this.camerapos.x))
+        this.background.setAttribute("y",-(this.camerapos.y))
     }
 
     /**

@@ -1,22 +1,37 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>simulador-quimica</title>
-  </head>
-  <body>
-    <svg viewbox="0 0 1000 1000" id="app">
-      <g id="camera" transform="translate(0,0)">
-        <circle cx="50" cy="50" r="25" fill="#00000000" stroke="#ff0000" />
-        <circle cx="500" cy="50" r="25" />
 
-      </g>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>simulador-quimica</title>
+</head>
 
-    </svg>
+<body>
+  <svg viewbox="0 0 1000 1000" id="app">
+    <defs>
+      <pattern id="patt1" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+        <circle cx="10" cy="10" r="1.4" fill="black" fill-opacity="30%" />
+      </pattern>
+    </defs>
 
 
-    <script type="module" src="/src/main.js"></script>
-  </body>
+    <g id="camera" transform="translate(0,0)">
+      <rect id="background" stroke="black" width="2000%" height="2000%" fill="url(#patt1)" style="transform: translate(-500%,-500%);" />
+      
+      <circle cx="50" cy="50" r="25" fill="#00000000" stroke="#ff0000" />
+      <circle cx="500" cy="50" r="25" />
+      
+    </g>
+
+
+    
+
+  </svg>
+
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>
