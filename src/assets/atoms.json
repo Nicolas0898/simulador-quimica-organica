@@ -1,35 +1,35 @@
 {
-  "atoms": [
-    {
+  "atoms": {
+    "C":{
       "name": "Carbono",
       "symbol": "C",
       "e_valence": 4
     },
-    {
+    "H":{
       "name": "Hidrogênio",
       "symbol": "H",
       "e_valence": 1,
       "stable_at": 2
     },
-    {
+    "O":{
       "name": "Oxigênio",
       "symbol": "O",
       "e_valence": 6
     },
-    {
+    "N":{
       "name": "Nitrogênio",
       "symbol": "N",
       "e_valence": 5
     },
-    {
+    "P":{
       "name": "Fósforo",
       "symbol": "P",
       "e_valence": 5
     },
-    {
+    "S":{
       "name": "Enxofre",
       "symbol": "S",
       "e_valence": 6
     }
-  ]
+  }
 }

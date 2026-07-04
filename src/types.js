@@ -10,6 +10,7 @@ export class Point{
     sum(point){
         this.x+=point.x
         this.y+=point.y
+        return this
     }
 
     /**
@@ -18,6 +19,7 @@ export class Point{
     subtract(point){
         this.x-=point.x
         this.y-=point.y
+        return this
     }
 
     /**
@@ -26,6 +28,7 @@ export class Point{
     multiply(point){
         this.x*=point.x
         this.y*=point.y
+        return this
     }
 
     /**
@@ -34,6 +37,7 @@ export class Point{
     multiply_scalar(number){
         this.x*=number
         this.y*=number
+        return this
     }
 
     /**
@@ -41,12 +45,17 @@ export class Point{
      * @returns number
      */
     size(){
-        return Math.sqrt(Math.pow(this.x,2),Math.pow(this.y,2))
+        return Math.sqrt(Math.pow(this.x,2) + Math.pow(this.y,2))
     }
 
     snap(gridsize,offset){
         this.x = Math.round((this.x - offset??0)/gridsize)*gridsize + offset??0
         this.y = Math.round((this.y - offset??0)/gridsize)*gridsize + offset??0
+    }
+
+    normalize(){
+        const mg = this.size()
+        return new Point(this.x/mg,this.y/mg)
     }
 
     /**

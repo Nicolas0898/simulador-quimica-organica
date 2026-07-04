@@ -1,6 +1,11 @@
-export class graph{
+export class Graph{
     /** @type {Map} */
     #adj_list = new Map()
+
+
+    get_adj_list(){
+        return new Map(this.#adj_list)
+    }
 
     get length(){
         return Array.from(this.#adj_list.entries()).length
@@ -49,7 +54,7 @@ export class graph{
         if(root == undefined) root = this.#adj_list.keys().next().value
         const list = this.#adj_list.get(root).filter(x=>visited.indexOf(x)==-1)
         visited.push(root)
-        console.log("root: ",root," vis: ",visited," list: ",list)
+        // console.log("root: ",root," vis: ",visited," list: ",list)
         yield root
 
 
@@ -62,6 +67,19 @@ export class graph{
             }
         }
         
+    }
+
+    /**
+     * 
+     * @param {graph} other 
+     */
+    merge(other){
+        for(const i of other.get_all_nodes()){
+            this.add_node(i)
+        }
+        for(const [i,val] of other.get_adj_list()){
+            this.#adj_list.set(i,val)
+        }
     }
 
 }
