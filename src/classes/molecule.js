@@ -32,8 +32,19 @@ export class Molecule extends Graph{
     get_molecule_bounding_box(){
         let minx,miny,maxx,maxy
         let search = this.molecule.dfs(this)
+        /** @type {Atom} */
         for (let i of search) {
-        
+            if(!minx){
+                minx = i.pos.x
+                miny = i.pos.y
+                maxx = i.pos.x
+                maxy = i.pos.y
+            }
+            if(minx<i.pos.x){minx = i.pos.x}
+            if(miny<i.pos.y){miny = i.pos.y}
+            if(maxx>i.pos.x){maxx = i.pos.x}
+            if(maxy>i.pos.y){maxy = i.pos.y}
         }
+        return {x1:minx,y1:miny,x2:maxx,y2:maxy}
     }
 }
