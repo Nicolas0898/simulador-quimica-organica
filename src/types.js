@@ -58,6 +58,10 @@ export class Point{
         return new Point(this.x/mg,this.y/mg)
     }
 
+    equals(other){
+        return this.x==other.x && this.y==other.y
+    }
+
     /**
      * @param {number} x
      * @param {number} y  

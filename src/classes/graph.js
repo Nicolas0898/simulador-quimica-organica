@@ -74,6 +74,7 @@ export class Graph{
      * @param {graph} other 
      */
     merge(other){
+        if(other==this) return 
         for(const i of other.get_all_nodes()){
             this.add_node(i)
         }

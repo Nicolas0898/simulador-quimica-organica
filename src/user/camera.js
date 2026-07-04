@@ -121,3 +121,5 @@ export class CameraHandler {
         this.camera.appendChild(element)
     }
 }
+
+export const gridsize = 40

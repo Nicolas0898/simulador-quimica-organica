@@ -1,13 +1,13 @@
 import './style.css'
 import { svgNS, Point} from './types'
-import { CameraHandler } from './user/camera'
+import { CameraHandler,gridsize } from './user/camera'
 import { KeybindHandler } from './user/keybindHandler'
 import { Graph } from './classes/graph'
+import { Molecule } from './classes/molecule'
 import { atoms } from './assets/atoms.json'
 import { Atom } from './classes/atom'
 
 const app = document.getElementById("app")
-const gridsize = 40
 const camera = new CameraHandler(app)
 const keybinds = new KeybindHandler(window)
 
@@ -31,6 +31,24 @@ keybinds.addBehaviour(
     const atm = new Atom(camera,"C",pos) 
   }
 )
+
+keybinds.addBehaviour(
+  "KeyO",
+  e=>{
+    let pos = camera.getPositionInWorld(camera.mousePosition)
+    pos.snap(gridsize,10)
+    const atm = new Atom(camera,"O",pos) 
+  }
+)
+
+keybinds.addBehaviour(
+  "KeyS",
+  e=>{
+    console.log(Atom.hovering.molecule)
+    console.log(Atom.hovering.count_atoms_in_molecule())
+  }
+)
+
 
 let startpoint
 let line
