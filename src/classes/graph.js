@@ -20,9 +20,10 @@ export class Graph{
     }
 
     remove_node(node){
-        for(let [nd,_] of this.adj_list){
+        let copy = new Map(this.adj_list)
+        for(let [nd,_] of copy){
             // console.log(nd)
-            this.disconnect(nd,node)
+            this.disconnect(node,nd)
         }
         this.adj_list.delete(node)
         //TODO: fazer ele desconectar do resto
@@ -69,6 +70,8 @@ export class Graph{
 
     *dfs(root,visited=[]){
         if(root == undefined) root = this.adj_list.keys().next().value
+        console.log("root: ",root)
+        if(this.adj_list.get(root) == undefined) console.log("ROOT FOR SOME FUCKING REASON HAS NOTHING IN THE MOLECULE")
         const list = this.adj_list.get(root).filter(x=>visited.indexOf(x)==-1)
         visited.push(root)
         // console.log("root: ",root," vis: ",visited," list: ",list)
@@ -93,10 +96,13 @@ export class Graph{
     merge(other){
         if(other==this) return 
         for(const i of other.get_all_nodes()){
-            this.add_node(i)
+            if(!this.adj_list.has(i)) this.add_node(i)
         }
         for(const [i,val] of other.get_adj_list()){
-            this.adj_list.set(i,val)
+            this.adj_list.set(i,[...this.adj_list.get(i),...val])
+        }
+        for(const i of this.get_all_nodes()){
+            i.molecule = this
         }
     }
 

@@ -3,30 +3,39 @@ import { Graph } from "./graph";
 export class Molecule extends Graph{
 
     split_molecules(){
+        console.log("hey, splitting was requested!")
+
         var all_molecules = []
         for(let [atom,conns] of this.adj_list){
+            console.log("starting loop.")
             let found = false
             /** @type {Molecule} */
+            console.log("veryfying if atom is already inside another molecule")
             for(let mol of all_molecules){
                 if(mol.is_node_in_graph(atom)){
                     found = true
+                    console.log("it is!")
                     atom.molecule = mol
                 }
             }
-
+            
             if(found) continue
-
+            console.log("it is not!, proceeding normal loop")
+            
+            
+            console.log("searching and creating a new molecule:")
+            console.log("current atom molecule:",atom.molecule)
             let connected = Array.from(atom.molecule.dfs(atom))
             console.log("connected:",connected)
             let new_mol = new Molecule()
             for(let conn of connected){
+                console.log("copying: ",conn," to new molecule!")
                 new_mol.adj_list.set(conn,this.adj_list.get(conn))
             }
             console.log("new molecule: ",new_mol)
             all_molecules.push(new_mol)
             atom.molecule = new_mol
         }
-        console.log("hey, splitting was requested!")
     }
 
     remove_node(node){
