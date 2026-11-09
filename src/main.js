@@ -27,7 +27,7 @@ keybinds.addBehaviour(
   "KeyC",
   e=>{
     let pos = camera.getPositionInWorld(camera.mousePosition)
-    pos.snap(gridsize,10)
+    pos = pos.snap(gridsize,10)
     const atm = new Atom(camera,"C",pos) 
   }
 )
@@ -36,7 +36,7 @@ keybinds.addBehaviour(
   "KeyO",
   e=>{
     let pos = camera.getPositionInWorld(camera.mousePosition)
-    pos.snap(gridsize,10)
+    pos = pos.snap(gridsize,10)
     const atm = new Atom(camera,"O",pos) 
   }
 )

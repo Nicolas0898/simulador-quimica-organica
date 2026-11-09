@@ -12,7 +12,7 @@ export class CameraHandler {
     background = document.getElementById("background")
     dragging = false
     /** @type{Point} */
-    mousePosition
+    mousePosition = new Point(0,0)
 
     getSVGCoordsFromEvent(e) {
         return this.getSVGCoords(new Point(e.clientX, e.clientY))
@@ -52,7 +52,6 @@ export class CameraHandler {
     constructor(svg) {
         console.log("asa")
         this.svg = svg
-
         this.svg.addEventListener("mousedown", e => {
             if (!this.dragging) return
             let mousepos = this.getSVGCoordsFromEvent(e)
@@ -76,7 +75,7 @@ export class CameraHandler {
         })
 
         this.svg.addEventListener("mousemove", e => {
-            this.mousePosition = new Point(e.clientX,e.clientY)
+            this.mousePosition.set(e.clientX,e.clientY)
             if (!this.dragging) return
             const rect = this.svg.getBoundingClientRect();
             let mousepos = this.getSVGCoordsFromEvent(e)

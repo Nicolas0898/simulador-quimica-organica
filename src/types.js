@@ -8,36 +8,40 @@ export class Point{
      * @param {Point} point 
      */
     sum(point){
-        this.x+=point.x
-        this.y+=point.y
-        return this
+        var np = new Point(this.x,this.y)
+        np.x+=point.x
+        np.y+=point.y
+        return np
     }
 
     /**
      * @param {Point} point 
      */
     subtract(point){
-        this.x-=point.x
-        this.y-=point.y
-        return this
+        var np = new Point(this.x,this.y)
+        np.x-=point.x
+        np.y-=point.y
+        return np
     }
 
     /**
      * @param {Point} point 
      */
     multiply(point){
-        this.x*=point.x
-        this.y*=point.y
-        return this
+        var np = new Point(this.x,this.y)
+        np.x*=point.x
+        np.y*=point.y
+        return np
     }
 
     /**
      * @param {number} number 
      */
     multiply_scalar(number){
-        this.x*=number
-        this.y*=number
-        return this
+        var np = new Point(this.x,this.y)
+        np.x*=number
+        np.y*=number
+        return np
     }
 
     /**
@@ -48,9 +52,11 @@ export class Point{
         return Math.sqrt(Math.pow(this.x,2) + Math.pow(this.y,2))
     }
 
-    snap(gridsize,offset){
-        this.x = Math.round((this.x - offset??0)/gridsize)*gridsize + offset??0
-        this.y = Math.round((this.y - offset??0)/gridsize)*gridsize + offset??0
+    snap(gridsize,offset=0){
+        var np = new Point(this.x,this.y)
+        np.x = Math.round((np.x - offset??0)/gridsize)*gridsize + offset??0
+        np.y = Math.round((np.y - offset??0)/gridsize)*gridsize + offset??0
+        return np
     }
 
     normalize(){
@@ -69,6 +75,12 @@ export class Point{
     constructor(x,y){
         this.x = x
         this.y = y
+    }
+
+    set(x,y){
+        this.x = x
+        this.y = y
+        return this
     }
 }
 
