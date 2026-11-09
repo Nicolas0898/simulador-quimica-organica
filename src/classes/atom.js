@@ -210,7 +210,7 @@ export class Atom {
 
         console.log("-------------------")
         console.log(this.molecule.get_all_nodes(this))
-        for(let atom of this.molecule.get_all_nodes(this)){
+        for(let atom of this.molecule.get_connected_nodes(this)){
             this.remove_line_with(atom)
         }
         this.svgElement.remove()

@@ -2,11 +2,42 @@ import { Graph } from "./graph";
 
 export class Molecule extends Graph{
 
+    split_molecules(){
+        var all_molecules = []
+        for(let [atom,conns] of this.adj_list){
+            let found = false
+            /** @type {Molecule} */
+            for(let mol of all_molecules){
+                if(mol.is_node_in_graph(atom)){
+                    found = true
+                    atom.molecule = mol
+                }
+            }
+
+            if(found) continue
+
+            let connected = Array.from(atom.molecule.dfs(atom))
+            console.log("connected:",connected)
+            let new_mol = new Molecule()
+            for(let conn of connected){
+                new_mol.adj_list.set(conn,this.adj_list.get(conn))
+            }
+            console.log("new molecule: ",new_mol)
+            all_molecules.push(new_mol)
+            atom.molecule = new_mol
+        }
+        console.log("hey, splitting was requested!")
+    }
+
+    remove_node(node){
+        super.remove_node(node)
+        this.split_molecules()
+    }
 
     count_atoms_in_molecule(root) {
         let search = this.dfs(root)
         let dict = new Map()
-        let adj_list = this.get_adj_list()
+        let adj_list = this.adj_list
 
         for (let i of search) {
             let s = i.properties.symbol

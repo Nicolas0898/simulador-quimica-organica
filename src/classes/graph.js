@@ -1,38 +1,42 @@
 export class Graph{
     /** @type {Map} */
     // Fazer conexões por peso
-    #adj_list = new Map()
+    adj_list = new Map()
 
 
     get_adj_list(){
-        return new Map(this.#adj_list)
+        return new Map(this.adj_list)
     }
 
     get length(){
-        return Array.from(this.#adj_list.entries()).length
+        return Array.from(this.adj_list.entries()).length
     }
 
     /**
      * @param {any} node 
      */
     add_node(node){
-        this.#adj_list.set(node,[])
+        this.adj_list.set(node,[])
     }
 
     remove_node(node){
-        for(let [nd,_] of this.#adj_list){
+        for(let [nd,_] of this.adj_list){
             // console.log(nd)
             this.disconnect(nd,node)
         }
-        this.#adj_list.delete(node)
+        this.adj_list.delete(node)
         //TODO: fazer ele desconectar do resto
     }
     get_all_nodes(){
-        return Array.from(this.#adj_list.keys())
+        return Array.from(this.adj_list.keys())
     }
 
     get_connected_nodes(node){
-        
+        return this.adj_list.get(node)
+    }
+
+    is_node_in_graph(node){
+        return this.adj_list.has(node)
     }
 
     /**
@@ -40,8 +44,8 @@ export class Graph{
      * @param {any} node2 
      */
     connect(node1,node2){
-        this.#adj_list.get(node1)?.push(node2)
-        this.#adj_list.get(node2)?.push(node1)
+        this.adj_list.get(node1)?.push(node2)
+        this.adj_list.get(node2)?.push(node1)
     }
 
     /**
@@ -49,8 +53,8 @@ export class Graph{
      * @param {any} node2 
      */
     disconnect(node1,node2){
-        this.#adj_list.set(node1,this.#adj_list.get(node1).filter(x=>{return x!=node2}))
-        this.#adj_list.set(node2,this.#adj_list.get(node2).filter(x=>{return x!=node1}))
+        this.adj_list.set(node1,this.adj_list.get(node1).filter(x=>{return x!=node2}))
+        this.adj_list.set(node2,this.adj_list.get(node2).filter(x=>{return x!=node1}))
     }
 
     /**
@@ -60,12 +64,12 @@ export class Graph{
      * @returns {boolean} 
      */
     is_connected(node1,node2){
-        return this.#adj_list.get(node1).indexOf(node2) != -1
+        return this.adj_list.get(node1).indexOf(node2) != -1
     }
 
     *dfs(root,visited=[]){
-        if(root == undefined) root = this.#adj_list.keys().next().value
-        const list = this.#adj_list.get(root).filter(x=>visited.indexOf(x)==-1)
+        if(root == undefined) root = this.adj_list.keys().next().value
+        const list = this.adj_list.get(root).filter(x=>visited.indexOf(x)==-1)
         visited.push(root)
         // console.log("root: ",root," vis: ",visited," list: ",list)
         yield root
@@ -92,7 +96,7 @@ export class Graph{
             this.add_node(i)
         }
         for(const [i,val] of other.get_adj_list()){
-            this.#adj_list.set(i,val)
+            this.adj_list.set(i,val)
         }
     }
 
