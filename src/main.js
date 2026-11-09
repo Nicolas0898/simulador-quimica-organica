@@ -49,6 +49,13 @@ keybinds.addBehaviour(
   }
 )
 
+keybinds.addBehaviour(
+  "KeyD",
+  e=>{
+    Atom.hovering.remove()
+  }
+)
+
 
 let startpoint
 let line

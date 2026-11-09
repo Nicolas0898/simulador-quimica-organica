@@ -21,7 +21,7 @@ export class Atom {
 
     static atoms = []
     properties
-    lines = []
+    lines = new Map()
 
     set pos(val) {
         this.#pos = val
@@ -148,7 +148,7 @@ export class Atom {
         this.line.setAttribute("y1", this.#pos.y)
         this.line.setAttribute("x2", this.#pos.x)
         this.line.setAttribute("y2", this.#pos.y)
-        this.lines.push(this.line)
+        // this.lines.push(this.line)
         // this.line.setAttribute("x1",this.#pos.x)
         // this.line.setAttribute("y1",this.#pos.y)
         this.line.setAttribute("stroke-width", 2)
@@ -171,7 +171,9 @@ export class Atom {
             pos = pos.snap(gridsize, 10)
             const newatm = new Atom(this.world, "C", pos, this)
             this.update_line_pos(newatm.pos, newatm)
+            this.lines.set(newatm,this.line)
         }else{
+            this.lines.set(Atom.hovering,this.line)
             this.molecule.merge(Atom.hovering.molecule)
             Atom.hovering.molecule = this.molecule
             this.molecule.connect(this,Atom.hovering)
@@ -193,6 +195,28 @@ export class Atom {
 
     count_atoms_in_molecule(){
         return this.molecule.count_atoms_in_molecule(this)
+    }
+
+    remove_line_with(atom){
+        if(this.lines.has(atom)){   
+            this.lines.get(atom).remove()
+        }
+        if(atom.lines.has(this)){
+            atom.lines.get(this).remove()
+        }
+    }
+
+    remove(){
+
+        console.log("-------------------")
+        console.log(this.molecule.get_all_nodes(this))
+        for(let atom of this.molecule.get_all_nodes(this)){
+            this.remove_line_with(atom)
+        }
+        this.svgElement.remove()
+        Atom.atoms = Atom.atoms.filter(el=>{return el!=this})
+        this.molecule.remove_node(this)
+        
     }
 }
 

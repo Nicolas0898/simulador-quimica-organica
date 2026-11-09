@@ -1,5 +1,6 @@
 export class Graph{
     /** @type {Map} */
+    // Fazer conexões por peso
     #adj_list = new Map()
 
 
@@ -18,8 +19,20 @@ export class Graph{
         this.#adj_list.set(node,[])
     }
 
-    get_all_nodes(node){
+    remove_node(node){
+        for(let [nd,_] of this.#adj_list){
+            // console.log(nd)
+            this.disconnect(nd,node)
+        }
+        this.#adj_list.delete(node)
+        //TODO: fazer ele desconectar do resto
+    }
+    get_all_nodes(){
         return Array.from(this.#adj_list.keys())
+    }
+
+    get_connected_nodes(node){
+        
     }
 
     /**
@@ -36,8 +49,8 @@ export class Graph{
      * @param {any} node2 
      */
     disconnect(node1,node2){
-        this.#adj_list.set(node1,this.#adj_list.get(node1).filter(x=>x!=node2))
-        this.#adj_list.set(node2,this.#adj_list.get(node2).filter(x=>x!=node1))
+        this.#adj_list.set(node1,this.#adj_list.get(node1).filter(x=>{return x!=node2}))
+        this.#adj_list.set(node2,this.#adj_list.get(node2).filter(x=>{return x!=node1}))
     }
 
     /**
