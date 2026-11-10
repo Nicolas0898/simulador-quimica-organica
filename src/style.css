@@ -57,3 +57,18 @@ body{
     background-color: rgba(100 150 255 / 1 );
   }
 }
+
+.popup{
+  position: fixed;
+  
+  background-color: rgb(0 0 0 / 0.75);
+  width: 20em;
+  height: 10em;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  color: white;
+}
+
+.popup-hidden{
+  visibility: hidden;
+}

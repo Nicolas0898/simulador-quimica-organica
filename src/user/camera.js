@@ -3,6 +3,7 @@ import { Point } from "../types"
 const svgNS = "http://www.w3.org/2000/svg"
 export class CameraHandler {
     /** @type {SVGGElement} */
+    static current
     camera = document.getElementById("camera")
     camerapos = new Point(0, 0)
     lastpos = new Point(0, 0)
@@ -50,7 +51,8 @@ export class CameraHandler {
      * @param {SVGElement} svg 
      */
     constructor(svg) {
-        console.log("asa")
+        CameraHandler.current = this
+        // console.log("asa")
         this.svg = svg
         this.svg.addEventListener("mousedown", e => {
             if (!this.dragging) return

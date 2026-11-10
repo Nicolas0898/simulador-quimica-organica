@@ -6,10 +6,14 @@ import { Graph } from './classes/graph'
 import { Molecule } from './classes/molecule'
 import { atoms } from './assets/atoms.json'
 import { Atom } from './classes/atom'
+import UIHandler from "./classes/ui.js"
 
 const app = document.getElementById("app")
 const camera = new CameraHandler(app)
 const keybinds = new KeybindHandler(window)
+console.log(UIHandler)
+UIHandler.showPopup("Teste")
+
 
 keybinds.addBehaviour(
   "Space",
@@ -44,15 +48,15 @@ keybinds.addBehaviour(
 keybinds.addBehaviour(
   "KeyS",
   e=>{
-    console.log(Atom.hovering.molecule)
-    console.log(Atom.hovering.count_atoms_in_molecule())
+    console.log(Atom.hovering?.molecule)
+    console.log(Atom.hovering?.count_atoms_in_molecule())
   }
 )
 
 keybinds.addBehaviour(
   "KeyD",
   e=>{
-    Atom.hovering.remove()
+    Atom.hovering?.remove()
   }
 )
 
