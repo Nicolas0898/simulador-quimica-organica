@@ -12,7 +12,7 @@ const app = document.getElementById("app")
 const camera = new CameraHandler(app)
 const keybinds = new KeybindHandler(window)
 console.log(UIHandler)
-UIHandler.showPopup("Teste")
+// UIHandler.showPopup("Átomo de <b>Teste</b>")
 
 
 keybinds.addBehaviour(

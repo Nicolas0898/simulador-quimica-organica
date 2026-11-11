@@ -2,6 +2,7 @@ import { CameraHandler, gridsize } from '../user/camera'
 import { atoms } from '../assets/atoms.json'
 import { svgNS, Point } from '../types'
 import { Molecule } from './molecule'
+import UI from "../classes/ui"
 
 export class Atom {
     /** @type {CameraHandler} */
@@ -17,7 +18,18 @@ export class Atom {
     /** @type {svgElement} */
     line
     /** @type {Atom} */
-    static hovering
+    static #hovering
+    static get hovering(){
+        return this.#hovering
+    }
+    static set hovering(val){
+        this.#hovering = val
+        if(val){
+            val.showPopup()
+        }else{
+            UI.hidePopup()
+        }
+    }
 
     static atoms = []
     properties
@@ -89,7 +101,6 @@ export class Atom {
         this.svgElement.addEventListener("mouseleave", e => {
             if (Atom.hovering == this)
                 Atom.hovering = null
-
         })
     }
 
@@ -177,6 +188,7 @@ export class Atom {
             this.molecule.merge(Atom.hovering.molecule)
             Atom.hovering.molecule = this.molecule
             this.molecule.connect(this,Atom.hovering)
+            Atom.hovering.showPopup()
         }
     }
 
@@ -207,7 +219,9 @@ export class Atom {
     }
 
     remove(){
-
+        if(Atom.hovering == this){
+            Atom.hovering = null
+        }
         console.log("-------------------")
         console.log(this.molecule.get_all_nodes(this))
         for(let atom of this.molecule.get_connected_nodes(this)){
@@ -216,7 +230,97 @@ export class Atom {
         this.svgElement.remove()
         Atom.atoms = Atom.atoms.filter(el=>{return el!=this})
         this.molecule.remove_node(this)
+
         
+    }
+
+    showPopup(){
+        // const connected = this.molecule.get_connected_nodes(this)
+        // console.log(this.properties)
+        const n = this.getConnectedN()
+        // stable at
+        const stat = (this.properties.stable_at??8)
+        // texto do hidrogênio
+        const hg = ((stat-this.properties.e_valence)-n)!=0?`<i style="font-size: 0.75em; color:lightgrey;">(+${(stat-this.properties.e_valence)-n}H)</i>`:""
+        let HTML = `
+        <b>Átomo de ${this.properties.name} (${this.properties.symbol})</b>
+        <hr>
+        Ligações: ${n}${hg}/${stat-this.properties.e_valence}<br>
+
+        `
+
+        if(this.properties.symbol == "C"){
+            HTML+=`
+                Tipo do carbono: ${this.getCarbonType()} <br>
+                Hibridização: ${this.getCarbonHybridisation()}
+            `
+        }
+
+        UI.showPopup(HTML)
+        
+    }
+
+    getConnectedAtoms(){
+        return this.molecule.get_connected_nodes(this)
+    }
+    getConnectedN(){
+        const connected = this.getConnectedAtoms()
+        return connected.length
+    }
+
+    getCarbonType(){
+        const atms = this.getUniqueConnected().filter(x=>{return x.properties.symbol=="C"})
+        const n = atms.length
+        if(n==0||n==1) return "Primário"
+        if(n==2) return "Secúndario"
+        if(n==3) return "Terciário"
+        if(n==4) return "Quartenário"
+    }
+
+    getUniqueConnected(){
+        const atms = this.getConnectedAtoms()
+        var arr = []
+        var n = 0
+
+        console.log(atms)
+        for(let a of atms){
+            const result = arr.indexOf(a)
+            if(result==-1){
+                n++
+                arr.push(a)
+            }
+        }
+
+        return arr
+    }
+
+    getEqualAmnt(){
+        const atms = this.getConnectedAtoms()
+        var arr = []
+        var n = 0
+
+        console.log(atms)
+        for(let a of atms){
+            const result = arr.indexOf(a)
+            if(result==-1){
+                arr.push(a)
+            }else{
+                n++
+        }
+
+        }
+        
+        return n
+    }
+
+    getCarbonHybridisation(){
+        //HACK:
+        const n = 4 - this.getEqualAmnt()
+        
+
+        if(n==4) return "sp³"
+        if(n==3) return "sp²"
+        if(n==2) return "sp"
     }
 }
 

@@ -31,11 +31,12 @@ class UI{
     
     /** @param {MouseEvent} mousePos  */
     #popupFrame(mousePos){
+        const padding=5
         const popupRect = this.#popup.getBoundingClientRect()
-        this.#popup.style.top = `${mousePos.clientY - popupRect.height}px`
+        this.#popup.style.top = `${mousePos.clientY - popupRect.height - padding}px`
         this.#popup.style.left = `${mousePos.clientX - popupRect.width/2}px`
         if(mousePos.clientY<(popupRect.height)){
-            this.#popup.style.top = `${mousePos.clientY }px`
+            this.#popup.style.top = `${mousePos.clientY + padding}px`
         }
         if(mousePos.clientX<(popupRect.width/2)){
             this.#popup.style.left = `${mousePos.clientX }px`
@@ -51,7 +52,7 @@ class UI{
     hidePopup(){
         document.removeEventListener("mousemove",this.activeFunction)
         this.activeFunction = null
-        this.#popup.classList.add("popu-hidden")
+        this.#popup.classList.add("popup-hidden")
     }
 
     addMode(icon){
