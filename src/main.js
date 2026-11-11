@@ -58,6 +58,7 @@ keybinds.addBehaviour(
     console.log(Atom.hovering?.count_atoms_in_molecule())
     console.log(Atom.hovering.molecule.classifyCarbonChain())
     console.log(Atom.hovering.molecule.getBasicNomenclature())
+    Atom.hovering.molecule.ui.update()
   }
 )
 

@@ -1,6 +1,8 @@
 
 import { Graph } from "./graph";
+import { moleculeUI } from "./moleculeUI";
 
+const PRIORITYLIST = {C:1,H:2,O:3}
 const ROOTS = {
     1: "met", 2: "et", 3: "prop", 4: "but", 5: "pent",
     6: "hex", 7: "hept", 8: "oct", 9: "non", 10: "dec"
@@ -10,6 +12,7 @@ const ALKYL = {
     1: "metil", 2: "etil", 3: "propil",
     4: "butil", 5: "pentil", 6: "hexil"
 };
+
 
 const MULTIPLIERS = { 2: "di", 3: "tri", 4: "tetra" };
 
@@ -94,6 +97,8 @@ function compareScores(a, b) {
 
 export class Molecule extends Graph {
 
+    ui = new moleculeUI(this)
+
     split_molecules() {
         const all_molecules = [];
         const visited = new Set();
@@ -113,7 +118,15 @@ export class Molecule extends Graph {
             all_molecules.push(new_mol);
         }
 
+        all_molecules.forEach(m=>m.ui.update())
+        this.ui.clearElements()
         return all_molecules;
+    }
+
+    merge(other){
+        super.merge(other)
+        this.ui.clearElements()
+        other.ui.clearElements()
     }
 
     remove_node(node) {
@@ -139,7 +152,10 @@ export class Molecule extends Graph {
             );
         }
 
-        return dict;
+        const sortedMap = new Map(
+            [...dict].sort(([keyA], [keyB]) => (PRIORITYLIST[keyA]??10)>=(PRIORITYLIST[keyB]??10 ) )
+        );  
+        return sortedMap;
     }
 
     get_molecule_bounding_box() {

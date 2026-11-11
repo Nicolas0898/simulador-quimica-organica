@@ -3,7 +3,7 @@ import UI from "../classes/ui"
 
 const svgNS = "http://www.w3.org/2000/svg"
 export class CameraHandler {
-    /** @type {SVGGElement} */
+    /** @type {CameraHandler} */
     static current
     camera = document.getElementById("camera")
     camerapos = new Point(0, 0)

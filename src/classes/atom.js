@@ -107,6 +107,8 @@ export class Atom {
             if (Atom.hovering == this)
                 Atom.hovering = null
         })
+
+        this.molecule.ui.update()
     }
 
     clicked() {
@@ -206,6 +208,7 @@ export class Atom {
                 
             this.updateLines()
         }
+        this.molecule.ui.update()
 
 
     }
@@ -345,6 +348,7 @@ export class Atom {
             const p2 = this.offsetPoint(target, this.pos)
             this.draw(p1, p2, this.line)
         }else if (UI.activeMode == "Selection"){
+            this.molecule.ui.update()
             this.pos = mp
             this.updateLines()
         }
