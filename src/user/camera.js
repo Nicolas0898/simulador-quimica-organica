@@ -1,4 +1,5 @@
 import { Point } from "../types"
+import UI from "../classes/ui"
 
 const svgNS = "http://www.w3.org/2000/svg"
 export class CameraHandler {
@@ -11,7 +12,10 @@ export class CameraHandler {
     enabled = true
     zoom = 1
     background = document.getElementById("background")
-    dragging = false
+    // dragging = false
+    get dragging(){
+        return UI.activeMode=="Move"
+    }
     /** @type{Point} */
     mousePosition = new Point(0,0)
 

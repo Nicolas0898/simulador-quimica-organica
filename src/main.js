@@ -15,15 +15,21 @@ console.log(UIHandler)
 // UIHandler.showPopup("Átomo de <b>Teste</b>")
 
 
+
+let lmode
 keybinds.addBehaviour(
   "Space",
   e=>{
-    camera.dragging = true 
+    lmode = UIHandler.activeMode
+    UIHandler.setModeActive("Move")
+    // camera.dragging = true 
+    
     camera.camera.style.cursor = "move";
   },
   e=> {
-    camera.dragging = false
+    // camera.dragging = false
     camera.camera.style.cursor = "default";
+    UIHandler.setModeActive(lmode )
   }
 )
 

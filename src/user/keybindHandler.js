@@ -30,6 +30,8 @@ export class KeybindHandler{
     }
 
     keydown(e){
+        if(e.repeat){ return}
+        // console.log(e.code)
         this.actions[e.code??e.button]?.downBehaviour?.(e)
     }
 
