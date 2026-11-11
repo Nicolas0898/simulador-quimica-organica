@@ -52,7 +52,7 @@ export class moleculeUI{
         for(const [atom,n] of atms){
             if(n>1)
                 atmsS+=`${atom}<tspan baseline-shift="sub" font-size="14u">${n}</tspan>`
-            else
+            else if(n==1)
                 atmsS+=`${atom}`
         }
         
