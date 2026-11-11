@@ -17,6 +17,7 @@ export class Atom {
     molecule
     /** @type {svgElement} */
     line
+    draw = this.drawSingleLine
     /** @type {Atom} */
     static #hovering
     static get hovering(){
@@ -112,9 +113,7 @@ export class Atom {
         // Cria uma circuferência em torno do atomo selecionado e poisiciona o 
         // ponto de acordo com a direção do mouse
         let np = new Point(this.#pos.x, this.#pos.y)
-        let dir = new Point(target.x, target.y).subtract(np).normalize().multiply_scalar(10)
-        np = np.sum(dir)
-        
+        np = this.offsetPoint(np,target)
 
         // console.log(Atom.hovering)
         // Verifica se ele NÃO está com o mouse em cima de outro átomo
@@ -154,17 +153,12 @@ export class Atom {
         // console.log("cricked")
         // console.log(this)
 
-        this.line = document.createElementNS(svgNS, "line")
-        this.line.setAttribute("x1", this.#pos.x)
-        this.line.setAttribute("y1", this.#pos.y)
-        this.line.setAttribute("x2", this.#pos.x)
-        this.line.setAttribute("y2", this.#pos.y)
+        this.line = this.draw(this.pos,this.pos)
         // this.lines.push(this.line)
         // this.line.setAttribute("x1",this.#pos.x)
         // this.line.setAttribute("y1",this.#pos.y)
-        this.line.setAttribute("stroke-width", 2)
-        this.line.setAttribute("stroke", "black")
-        this.world.add(this.line)
+        
+        this.world.add(this.line[0])
     }
 
     released() {
@@ -173,29 +167,170 @@ export class Atom {
 
 
         if (Atom.hovering == this){
-            this.line.remove()
+            for(let l of this.line){
+                l.remove()
+            }
             return
         }
 
+        let otherpos
+        let otheratom
         if (!Atom.hovering) {
             let pos = this.world.getPositionInWorld(this.world.mousePosition)
             pos = pos.snap(gridsize, 10)
             const newatm = new Atom(this.world, "C", pos, this)
-            this.update_line_pos(newatm.pos, newatm)
-            this.lines.set(newatm,this.line)
+            otherpos = pos
+            otheratom = newatm
         }else{
-            this.lines.set(Atom.hovering,this.line)
+            if(this.lines.has(Atom.hovering) || Atom.hovering.lines.has(this)){
+                // console.log("sdgkçasjdhufglkdf")
+                this.remove_line_with(Atom.hovering)
+            }
+
             this.molecule.merge(Atom.hovering.molecule)
             Atom.hovering.molecule = this.molecule
             this.molecule.connect(this,Atom.hovering)
+            otherpos = Atom.hovering.pos
             Atom.hovering.showPopup()
+
+            otheratom = Atom.hovering
+
+            const conamt = this.getConnCountWith(Atom.hovering)
+            console.log("CONN AMT:",conamt)
+            switch(conamt){
+                case 1: this.draw=this.drawSingleLine; break;
+                case 2: this.draw=this.drawDoubleLine; break;
+                case 3: this.draw=this.drawTripleLine; break;
+            }
         }
+        
+        
+        for(let l of this.line){
+            l.remove()
+        }
+        
+        const [p1,p2] = this.offsetBoth(this.pos,otherpos)
+        console.log(this.draw)
+        let lns = this.draw(p1,p2)
+        this.lines.set(otheratom,lns)
+        this.draw = this.drawSingleLine
+
+    }
+
+
+    styleLine(line){
+        line.setAttribute("stroke-width", 2)
+        line.setAttribute("stroke", "black")
+    }
+
+
+    /**
+     * 
+     * @param {Point} point 
+     * @param {Point} towards 
+     * @param {number} radius 
+     */
+    offsetPoint(point,towards,radius=10){
+        let np = new Point(point.x, point.y)
+        let dir = new Point(towards.x, towards.y).subtract(np).normalize().multiply_scalar(radius)
+        np = np.sum(dir)
+        return np
+    }
+
+    offsetBoth(point,towards,radius=10){
+        return [this.offsetPoint(point,towards,radius),this.offsetPoint(towards,point,radius)]
+    }
+
+    /**
+     * 
+     * @param {Point} pointA 
+     * @param {Point} pointB 
+     * @param {Array} lines 
+     */
+    // Lines é uma array para manter a mesma sintaxe de outros métodos
+    drawSingleLine(pointA,pointB,lines=null){
+        if(!lines){
+            lines=[document.createElementNS(svgNS, "line")]
+            this.world.add(lines[0])
+        }
+
+        
+        lines[0].setAttribute("x1", pointA.x)
+        lines[0].setAttribute("y1", pointA.y)
+        lines[0].setAttribute("x2", pointB.x)
+        lines[0].setAttribute("y2", pointB.y)
+        this.styleLine(lines[0])
+
+        return lines
+    }
+
+      /**
+     * 
+     * @param {Point} pointA 
+     * @param {Point} pointB 
+     * @param {Array} lines 
+     */
+    drawDoubleLine(pointA,pointB,lines=null,distance=3){
+        if(!lines){
+            lines=[document.createElementNS(svgNS, "line"),document.createElementNS(svgNS, "line")]
+            this.world.add(lines[0])
+            this.world.add(lines[1])
+        }
+
+        const dir = pointA.subtract(pointB).normalize()
+        const rotated = dir.rotate_rad(Math.PI/2)
+        const summedA1 = pointA.sum(rotated.multiply_scalar(distance))
+        const summedB1 = pointB.sum(rotated.multiply_scalar(distance))
+        const summedA2 = pointA.sum(rotated.multiply_scalar(-distance))
+        const summedB2 = pointB.sum(rotated.multiply_scalar(-distance))
+        lines[0].setAttribute("x1", summedA1.x)
+        lines[0].setAttribute("y1", summedA1.y)
+        lines[0].setAttribute("x2", summedB1.x)
+        lines[0].setAttribute("y2", summedB1.y)
+        
+        lines[1].setAttribute("x1", summedA2.x)
+        lines[1].setAttribute("y1", summedA2.y)
+        lines[1].setAttribute("x2", summedB2.x)
+        lines[1].setAttribute("y2", summedB2.y)
+        this.styleLine(lines[0])
+        this.styleLine(lines[1])
+
+        return lines
+    }
+
+    /**
+     * 
+     * @param {Point} pointA 
+     * @param {Point} pointB 
+     * @param {Array} lines 
+     */
+    drawTripleLine(pointA,pointB,lines=null,distance=3){
+        if(!lines){
+            lines=[
+                document.createElementNS(svgNS, "line"),
+                document.createElementNS(svgNS, "line"),
+                document.createElementNS(svgNS, "line")
+            ]
+            this.world.add(lines[0])
+            this.world.add(lines[1])
+            this.world.add(lines[2])
+        }
+
+        this.drawSingleLine(pointA,pointB,[lines[0]])
+        this.drawDoubleLine(pointA,pointB,[lines[1],lines[2]],distance)
+
+        return lines
     }
 
     mouse_moved() {
         if (!this.dragging) return
         let mp = this.world.getPositionInWorld(this.world.mousePosition)
-        this.update_line_pos(mp)
+        // this.update_line_pos(mp)
+        let target = (Atom.hovering&&Atom.hovering!=this)?Atom.hovering.pos:mp
+
+        const p1 = this.offsetPoint(this.pos,target)
+        const p2 = this.offsetPoint(target,this.pos)
+        this.draw(p1,p2,this.line)
     }
 
 
@@ -210,20 +345,16 @@ export class Atom {
     }
 
     remove_line_with(atom){
-        if(this.lines.has(atom)){   
-            this.lines.get(atom).remove()
-        }
-        if(atom.lines.has(this)){
-            atom.lines.get(this).remove()
-        }
+        this.lines.get(atom)?.forEach(e => {console.log("aaa:",e); e.remove()})
+        atom.lines.get(this)?.forEach(e => {console.log("aaa:",e); e.remove()})  
     }
 
     remove(){
         if(Atom.hovering == this){
             Atom.hovering = null
         }
-        console.log("-------------------")
-        console.log(this.molecule.get_all_nodes(this))
+        // console.log("-------------------")
+        // console.log(this.molecule.get_all_nodes(this))
         for(let atom of this.molecule.get_connected_nodes(this)){
             this.remove_line_with(atom)
         }
@@ -268,6 +399,10 @@ export class Atom {
         return connected.length
     }
 
+    getConnCountWith(atom){
+        return this.getConnectedAtoms().filter(x=>{return x==atom}).length
+    }
+
     getCarbonType(){
         const atms = this.getUniqueConnected().filter(x=>{return x.properties.symbol=="C"})
         const n = atms.length
@@ -282,7 +417,7 @@ export class Atom {
         var arr = []
         var n = 0
 
-        console.log(atms)
+        // console.log(atms)
         for(let a of atms){
             const result = arr.indexOf(a)
             if(result==-1){
@@ -299,7 +434,7 @@ export class Atom {
         var arr = []
         var n = 0
 
-        console.log(atms)
+        // console.log(atms)
         for(let a of atms){
             const result = arr.indexOf(a)
             if(result==-1){

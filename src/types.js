@@ -82,6 +82,17 @@ export class Point{
         this.y = y
         return this
     }
+
+    rotate_rad(angle){
+        var np = new Point(this.x,this.y)
+        np.x = this.x * Math.cos(angle) + this.y * -Math.sin(angle)
+        np.y = this.x * Math.sin(angle) + this.y * Math.cos(angle)
+        return np
+    }
+
+    clone(){
+        return new Point(this.x,this.y)
+    }
 }
 
 export const svgNS = "http://www.w3.org/2000/svg"

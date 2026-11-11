@@ -60,6 +60,13 @@ keybinds.addBehaviour(
   }
 )
 
+keybinds.addBehaviour(
+  "KeyY",
+  e=>{
+    console.log(Atom.hovering?.lines)
+  }
+)
+
 
 let startpoint
 let line
