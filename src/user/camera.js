@@ -83,7 +83,7 @@ export class CameraHandler {
             let mousepos = this.getSVGCoordsFromEvent(e)
 
             if (e.buttons == 1) {
-                console.log()
+                // console.log()
                 let diff = { x: mousepos.x - this.lastpos.x, y: mousepos.y - this.lastpos.y }
                 this.lastpos = mousepos
                 this.camerapos.x += (diff.x / this.zoom)

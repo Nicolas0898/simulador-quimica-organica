@@ -161,15 +161,19 @@ export class Atom {
         this.world.add(this.line[0])
     }
 
+    removeActiveLine(){
+        for(let l of this.line){
+                l.remove()
+        }
+    }
+
     released() {
         if (!this.dragging) return
         this.dragging = false
 
 
-        if (Atom.hovering == this){
-            for(let l of this.line){
-                l.remove()
-            }
+        if (Atom.hovering == this || ( Atom.hovering!=this && Atom.hovering &&!Atom.hovering.canConnect() ) || !this.canConnect()){
+            this.removeActiveLine()
             return
         }
 
@@ -205,9 +209,8 @@ export class Atom {
         }
         
         
-        for(let l of this.line){
-            l.remove()
-        }
+        this.removeActiveLine()
+
         
         const [p1,p2] = this.offsetBoth(this.pos,otherpos)
         console.log(this.draw)
@@ -377,6 +380,7 @@ export class Atom {
         <b>Átomo de ${this.properties.name} (${this.properties.symbol})</b>
         <hr>
         Ligações: ${n}${hg}/${stat-this.properties.e_valence}<br>
+        Can connect: ${this.canConnect()} <br>
 
         `
 
@@ -456,6 +460,11 @@ export class Atom {
         if(n==4) return "sp³"
         if(n==3) return "sp²"
         if(n==2) return "sp"
+    }
+
+    canConnect(){
+        console.log(this.getConnectedN(),this.properties.stable_at)
+        return this.getConnectedN() < (this.properties.stable_at??8 - this.properties.e_valence)
     }
 }
 
