@@ -31,7 +31,7 @@ export class Atom {
             UI.hidePopup()
         }
     }
-
+ 
     static atoms = []
     properties
     lines = new Map()
@@ -336,7 +336,23 @@ export class Atom {
         this.draw(p1,p2,this.line)
     }
 
-
+    
+        remove(){
+            if(Atom.hovering == this){
+                Atom.hovering = null
+            }
+            // console.log("-------------------")
+            // console.log(this.molecule.get_all_nodes(this))
+            for(let atom of this.molecule.get_connected_nodes(this)){
+                this.remove_line_with(atom)
+            }
+            this.svgElement.remove()
+            Atom.atoms = Atom.atoms.filter(el=>{return el!=this})
+            this.molecule.remove_node(this)
+    
+            
+        }
+    
 
     toString() {
         return this.properties.symbol
@@ -350,22 +366,6 @@ export class Atom {
     remove_line_with(atom){
         this.lines.get(atom)?.forEach(e => {console.log("aaa:",e); e.remove()})
         atom.lines.get(this)?.forEach(e => {console.log("aaa:",e); e.remove()})  
-    }
-
-    remove(){
-        if(Atom.hovering == this){
-            Atom.hovering = null
-        }
-        // console.log("-------------------")
-        // console.log(this.molecule.get_all_nodes(this))
-        for(let atom of this.molecule.get_connected_nodes(this)){
-            this.remove_line_with(atom)
-        }
-        this.svgElement.remove()
-        Atom.atoms = Atom.atoms.filter(el=>{return el!=this})
-        this.molecule.remove_node(this)
-
-        
     }
 
     showPopup(){
@@ -391,6 +391,15 @@ export class Atom {
             `
         }
 
+        HTML+="<hr>"
+        
+        let nome = this.molecule.getBasicNomenclature()
+        let classi = this.molecule.classifyCarbonChain()
+        
+        console.log(nome)
+        console.log(classi)
+
+        
         UI.showPopup(HTML)
         
     }
