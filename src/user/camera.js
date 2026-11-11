@@ -10,6 +10,7 @@ export class CameraHandler {
     lastpos = new Point(0, 0)
     svg
     enabled = true
+    mouseDown = false
     zoom = 1
     background = document.getElementById("background")
     // dragging = false
@@ -59,9 +60,14 @@ export class CameraHandler {
         // console.log("asa")
         this.svg = svg
         this.svg.addEventListener("mousedown", e => {
+            this.mouseDown = true
             if (!this.dragging) return
             let mousepos = this.getSVGCoordsFromEvent(e)
             this.lastpos = mousepos
+        })
+
+        this.svg.addEventListener("mouseup",e=>{
+            this.mouseDown = false
         })
 
         this.svg.addEventListener("wheel", e => {

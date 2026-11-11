@@ -95,56 +95,18 @@ export class Atom {
         window.addEventListener("mouseup", this.released.bind(this))
         window.addEventListener("mousemove", this.mouse_moved.bind(this))
         this.svgElement.addEventListener("mouseenter", e => {
-            Atom.hovering = this
+            console.log(UI.activeMode,this.world.mouseDown)
+            if(UI.activeMode=="Delete" && this.world.mouseDown){
+                this.remove()
+            }else{
+                Atom.hovering = this
+            }
             // console.log(this)
         })
         this.svgElement.addEventListener("mouseleave", e => {
             if (Atom.hovering == this)
                 Atom.hovering = null
         })
-    }
-
-    // Target é a posição
-    // force_hover é para obrigar a função a dar hover em um átomo
-    update_line_pos(target, force_hover = null) {
-        if (!this.line) return
-
-        // Cria uma circuferência em torno do atomo selecionado e poisiciona o 
-        // ponto de acordo com a direção do mouse
-        let np = new Point(this.#pos.x, this.#pos.y)
-        np = this.offsetPoint(np, target)
-
-        // console.log(Atom.hovering)
-        // Verifica se ele NÃO está com o mouse em cima de outro átomo
-        if ((Atom.hovering == null || Atom.hovering == this) && !force_hover) {
-            // pega e define o ponto final da linha de acordo com o target
-            // tp= Target Pos (normalmente a posição do mouse)
-            this.line.setAttribute("x2", target.x)
-            this.line.setAttribute("y2", target.y)
-
-            this.line.setAttribute("x1", np.x)
-            this.line.setAttribute("y1", np.y)
-
-        } else {
-            const tt = Atom.hovering ?? force_hover
-            // console.log("agfas")
-
-            // refaz o esquema da circuferência do ponto mas apontando para o átomo a ser conectado
-            np = new Point(this.#pos.x, this.#pos.y)
-            dir = new Point(tt.pos.x, tt.pos.y).subtract(np).normalize().multiply_scalar(10)
-            np = np.sum(dir)
-            if (!isNaN(np.x) && !isNaN(np.y)) {
-                this.line.setAttribute("x1", np.x)
-                this.line.setAttribute("y1", np.y)
-            }
-
-            // faz o mesmo esquema da circuferência mas pro outro átomoc
-            let tp = new Point(tt.pos.x, tt.pos.y)
-            let tpdir = new Point(tp.x, tp.y).subtract(np).normalize().multiply_scalar(-10)
-            tp = tp.sum(tpdir)
-            this.line.setAttribute("x2", tp.x)
-            this.line.setAttribute("y2", tp.y)
-        }
     }
 
     clicked() {
@@ -163,6 +125,8 @@ export class Atom {
         }else if(UI.activeMode == "Selection"){
             this.dragging = true
 
+        }else if(UI.activeMode == "Delete"){
+            this.remove()
         }
     }
 

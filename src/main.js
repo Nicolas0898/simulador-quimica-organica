@@ -56,6 +56,8 @@ keybinds.addBehaviour(
   e=>{
     console.log(Atom.hovering?.molecule)
     console.log(Atom.hovering?.count_atoms_in_molecule())
+    console.log(Atom.hovering.molecule.classifyCarbonChain())
+    console.log(Atom.hovering.molecule.getBasicNomenclature())
   }
 )
 
@@ -74,20 +76,33 @@ keybinds.addBehaviour(
 )
 
 
-let startpoint
-let line
-function updateLine(pos){
-    line.setAttribute("x1",startpoint.x)
-    line.setAttribute("y1",startpoint.y)
-    line.setAttribute("x2",pos.x)
-    line.setAttribute("y2",pos.y)
-    line.setAttribute("stroke-width",2)
-    line.setAttribute("stroke","black")
-}
+keybinds.addBehaviour("Digit1",e=>{UIHandler.setModeActive("Move")})
+keybinds.addBehaviour("Digit2",e=>{UIHandler.setModeActive("Selection")})
+keybinds.addBehaviour("Digit3",e=>{UIHandler.setModeActive("Line")})
+keybinds.addBehaviour("Digit4",e=>{UIHandler.setModeActive("Delete")})
 
-UIHandler.addMode("Move")
-UIHandler.addMode("Selection")
-UIHandler.addMode("Line")
+keybinds.addBehaviour(
+  "2",
+  e=>{
+    if(UIHandler.activeMode=="Line" && !Atom.hovering){
+      let a = new Atom(camera,"C",camera.getPositionInWorld(camera.mousePosition).snap(gridsize,10))
+      a.clicked()
+    }
+  }
+
+)
+
+
+
+
+import hand from './icons/hand-index-thumb.svg'
+import dash from './icons/dash-lg.svg'
+import mouse from './icons/mouse.svg'
+import x from './icons/x.svg'
+UIHandler.addMode("Move",hand)
+UIHandler.addMode("Selection",mouse)
+UIHandler.addMode("Line",dash)
+UIHandler.addMode("Delete",x)
 UIHandler.setModeActive("Selection")
 // keybinds.addBehaviour(
 //   "0",
