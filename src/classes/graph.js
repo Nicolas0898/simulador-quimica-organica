@@ -70,7 +70,7 @@ export class Graph{
 
     *dfs(root,visited=[]){
         if(root == undefined) root = this.adj_list.keys().next().value
-        console.log("root: ",root)
+        // console.log("root: ",root)
         if(this.adj_list.get(root) == undefined) console.log("ROOT FOR SOME FUCKING REASON HAS NOTHING IN THE MOLECULE")
         const list = this.adj_list.get(root).filter(x=>visited.indexOf(x)==-1)
         visited.push(root)

@@ -79,7 +79,10 @@ function updateLine(pos){
     line.setAttribute("stroke","black")
 }
 
-
+UIHandler.addMode("Move")
+UIHandler.addMode("Selection")
+UIHandler.addMode("Line")
+UIHandler.setModeActive("Selection")
 // keybinds.addBehaviour(
 //   "0",
 //   (e)=> {

@@ -46,6 +46,12 @@ body{
   
 }
 
+.sidebar-btn img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .sidebar-btn-active{
   background-color: rgb(100, 150, 255);
   color: white;

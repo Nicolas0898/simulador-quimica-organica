@@ -8,6 +8,8 @@ class UI{
     /**@type {HTMLDivElement} */
     #popup
     activeFunction = null
+    activeMode
+    #modes = []
 
     constructor(){
         this.#sidebar = document.getElementById("sidebar")
@@ -55,8 +57,35 @@ class UI{
         this.#popup.classList.add("popup-hidden")
     }
 
-    addMode(icon){
+    addMode(name,icon){
+        let btn = document.createElement("button")
+        
+        if(icon){
+            let ic = document.createElement("img")
+            ic.src = icon
+            btn.appendChild(ic)
+        }else{
+            btn.textContent = name[0]
+        }
 
+        btn.classList.add("sidebar-btn")
+
+        btn.addEventListener("click",this.setModeActive.bind(this,name))
+
+        this.#sidebar.appendChild(btn)
+        this.#modes.push([name,btn])
+    }
+
+    setModeActive(name){
+        for(let [mode_name,btn] of this.#modes){
+            if(mode_name!=name){
+                btn.classList.remove("sidebar-btn-active")
+            }else{
+                btn.classList.add("sidebar-btn-active")
+            }
+        }
+
+        this.activeMode = name
     }
 
 }
