@@ -142,3 +142,10 @@ UIHandler.addAtomToTopbar("O")
 
 document.getElementById("helpDialog").showModal()
 console.log(atoms)
+
+document.addEventListener('pointerdown', (event) => {
+  // Release implicit touch capture so other elements can detect pointerenter/pointerover
+  if (event.target.hasPointerCapture(event.pointerId)) {
+    event.target.releasePointerCapture(event.pointerId);
+  }
+});

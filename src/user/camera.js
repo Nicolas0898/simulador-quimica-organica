@@ -13,9 +13,11 @@ export class CameraHandler {
     mouseDown = false
     zoom = 1
     background = document.getElementById("background")
+    activePointer = new Map()
+    prevDistance = -1
     // dragging = false
     get dragging(){
-        return UI.activeMode=="Move"
+        return UI.activeMode=="Move" && this.activePointer.size<=1
     }
     /** @type{Point} */
     mousePosition = new Point(0,0)
@@ -59,14 +61,19 @@ export class CameraHandler {
         CameraHandler.current = this
         // console.log("asa")
         this.svg = svg
-        this.svg.addEventListener("mousedown", e => {
+        this.svg.addEventListener("pointerdown", e => {
+            this.prevDistance = -1
+            this.activePointer.set(e.pointerId,e)
+
             this.mouseDown = true
             if (!this.dragging) return
             let mousepos = this.getSVGCoordsFromEvent(e)
             this.lastpos = mousepos
+
         })
 
-        this.svg.addEventListener("mouseup",e=>{
+        this.svg.addEventListener("pointerup",e=>{
+            this.activePointer.delete(e.pointerId)
             this.mouseDown = false
         })
 
@@ -86,8 +93,34 @@ export class CameraHandler {
             // this.camerapos.x += mousepos.x*factor
         })
 
-        this.svg.addEventListener("mousemove", e => {
+        this.svg.addEventListener("pointermove", e => {
             this.mousePosition.set(e.clientX,e.clientY)
+            this.activePointer.set(e.pointerId,e)
+
+            if(UI.isMobile()){
+                // console.log("AA",this.activePointer.size)
+                // console.log(this.activePointer)
+                if(this.activePointer.size === 2){
+                    const [p1, p2] = Array.from(this.activePointer.values());
+                    const currentDistance = Math.hypot(p1.clientX - p2.clientX, p1.clientY - p2.clientY);
+                    
+                    if(this.prevDistance<0){
+                        this.prevDistance = currentDistance
+                    }
+                    let diff = (currentDistance - this.prevDistance)/100.0
+
+                    this.prevDistance = currentDistance
+                    console.log(currentDistance,diff)
+                    if(this.zoom + diff>0){
+
+                        this.setZoom(this.zoom + diff)
+                    }
+                    console.log(this.zoom)
+
+                }
+
+            }
+
             if (!this.dragging) return
             const rect = this.svg.getBoundingClientRect();
             let mousepos = this.getSVGCoordsFromEvent(e)
@@ -102,6 +135,8 @@ export class CameraHandler {
                 this.update()
             }
         })
+
+
 
     }
 

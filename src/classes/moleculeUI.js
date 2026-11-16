@@ -116,10 +116,10 @@ export class moleculeUI{
         CameraHandler.current.add(rect)
   
         
-        rect.addEventListener("mouseenter",this.showPopup.bind(this))            
-        svText.addEventListener("mouseenter",this.showPopup.bind(this))            
-        rect.addEventListener("mouseout",()=> {UI.hidePopup()})
-        svText.addEventListener("mouseout",()=> {UI.hidePopup()})
+        rect.addEventListener("pointerenter",this.showPopup.bind(this))            
+        svText.addEventListener("pointerenter",this.showPopup.bind(this))            
+        rect.addEventListener("pointerout",()=> {UI.hidePopup()})
+        svText.addEventListener("pointerout",()=> {UI.hidePopup()})
         this.#box = rect
     }
 

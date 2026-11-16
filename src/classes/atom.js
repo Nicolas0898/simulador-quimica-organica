@@ -92,11 +92,11 @@ export class Atom {
 
 
         this.svgElement.classList.add("atom")
-        this.svgElement.addEventListener("mousedown", this.clicked.bind(this))
-        window.addEventListener("mouseup", this.released.bind(this))
-        window.addEventListener("mousemove", this.mouse_moved.bind(this))
-        this.svgElement.addEventListener("mouseenter", e => {
-            // console.log(UI.activeMode,this.world.mouseDown)
+        this.svgElement.addEventListener("pointerdown", this.clicked.bind(this))
+        window.addEventListener("pointerup", this.released.bind(this))
+        window.addEventListener("pointermove", this.mouse_moved.bind(this))
+        this.svgElement.addEventListener("pointerenter", e => {
+            // console.log(UI.activeMode,this.world.pointerDown)
             if(UI.activeMode=="Delete" && this.world.mouseDown){
                 this.remove()
             }else{
@@ -104,7 +104,7 @@ export class Atom {
             }
             // console.log(this)
         })
-        this.svgElement.addEventListener("mouseleave", e => {
+        this.svgElement.addEventListener("pointerleave", e => {
             if (Atom.hovering == this)
                 Atom.hovering = null
         })
@@ -113,6 +113,11 @@ export class Atom {
     }
 
     clicked() {
+        const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+        if(isTouchDevice){
+            // Atom.hovering = this
+        }
+
         if (UI.activeMode == "Line") {
 
             this.dragging = true
@@ -280,7 +285,7 @@ export class Atom {
 
         return lines
     }
-
+// 
     /**
    * 
    * @param {Point} pointA 
@@ -357,14 +362,14 @@ export class Atom {
             line.addEventListener("click",e=>{
                 if(UI.activeMode == "Delete"){ this.disconnect_once(other) }
             })
-             line.addEventListener("mouseenter",e=>{
+             line.addEventListener("pointerenter",e=>{
                 // if(UI.activeMode == "Delete"){ this.disconnect_once(other); return}
                 Atom.line_hovering = [line,this,other]
                 line.setAttribute("stroke","rgb(100 200 255)")
              })
             
 
-             line.addEventListener("mouseleave",e=>{
+             line.addEventListener("pointerleave",e=>{
                 Atom.line_hovering = null 
                 line.setAttribute("stroke","black")
              })

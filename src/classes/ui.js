@@ -16,6 +16,11 @@ class UI{
     /** @type {CameraHandler} */
     world
 
+    isMobile(){
+        const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+        return isTouchDevice
+    }
+
     setWorld(world){
         this.world = world
     }
@@ -32,12 +37,14 @@ class UI{
     
     showPopup(html,fixed=false){
         if(this.activeFunction){
-            document.removeEventListener("mousemove",this.activeFunction)
+            document.removeEventListener("pointermove",this.activeFunction)
         }
         this.#popup.classList.remove("popup-hidden")
         this.#popup.innerHTML = html
         this.activeFunction = this.#popupFrame.bind(this)
-        document.addEventListener("mousemove",this.activeFunction)
+        if(!this.isMobile()){
+            document.addEventListener("pointermove",this.activeFunction)
+        }
     }
     
     /** @param {MouseEvent} mousePos  */
@@ -61,7 +68,7 @@ class UI{
     }
     
     hidePopup(){
-        document.removeEventListener("mousemove",this.activeFunction)
+        document.removeEventListener("pointermove",this.activeFunction)
         this.activeFunction = null
         this.#popup.classList.add("popup-hidden")
     }
