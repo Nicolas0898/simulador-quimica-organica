@@ -154,7 +154,7 @@ hr{
 }
 
 .smic{
-  width: var(font-size);
+  width: 1.5em;
   padding-right: 5px;
 }
 
