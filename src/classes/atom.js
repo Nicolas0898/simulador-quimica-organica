@@ -20,6 +20,7 @@ export class Atom {
     draw = this.drawSingleLine
     /** @type {Atom} */
     static #hovering
+    static line_hovering
     static get hovering() {
         return this.#hovering
     }
@@ -188,6 +189,7 @@ export class Atom {
             // console.log(this.draw)
             let lns = this.draw(p1, p2)
             this.lines.set(otheratom, lns)
+            this.bindLinesToEvent(lns,otheratom)
             this.draw = this.drawSingleLine
         }else if(UI.activeMode == "Selection"){
             this.pos = this.world.getPositionInWorld(this.world.mousePosition).snap(gridsize,10)
@@ -229,6 +231,7 @@ export class Atom {
            const [p1,p2] = this.offsetBoth(this.pos,i.pos)
            let r = this.getDrawFunction(n)(p1,p2)
            this.lines.set(i,r)
+           this.bindLinesToEvent(r,i)
         }
     }
 
@@ -336,6 +339,29 @@ export class Atom {
         return lines
     }
 
+
+    /**
+     * 
+     * @param {Array} lines 
+     * @param {Atom} other 
+     */
+    bindLinesToEvent(lines,other){
+        for(const line of lines){
+             line.addEventListener("mouseenter",e=>{
+                Atom.line_hovering = [line,this,other]
+                line.setAttribute("stroke","rgb(100 200 255)")
+             })
+            
+
+             line.addEventListener("mouseleave",e=>{
+                Atom.line_hovering = null 
+                line.setAttribute("stroke","black")
+             })
+
+        }
+
+    }
+
     mouse_moved() {
         if (!this.dragging) return
         let mp = this.world.getPositionInWorld(this.world.mousePosition)
@@ -398,7 +424,6 @@ export class Atom {
         <b>Átomo de ${this.properties.name} (${this.properties.symbol})</b>
         <hr>
         Ligações: ${n}${hg}/${stat - this.properties.e_valence}<br>
-        Can connect: ${this.canConnect()} <br>
 
         `
 

@@ -83,3 +83,8 @@ body{
 hr{
   border-style: solid;
 }
+
+
+.warning{
+  color: rgb(255 220  150);
+}

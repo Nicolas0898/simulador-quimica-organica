@@ -43,6 +43,15 @@ keybinds.addBehaviour(
 )
 
 keybinds.addBehaviour(
+  "KeyN",
+  e=>{
+    let pos = camera.getPositionInWorld(camera.mousePosition)
+    pos = pos.snap(gridsize,10)
+    const atm = new Atom(camera,"N",pos) 
+  }
+)
+
+keybinds.addBehaviour(
   "KeyO",
   e=>{
     let pos = camera.getPositionInWorld(camera.mousePosition)
@@ -52,27 +61,41 @@ keybinds.addBehaviour(
 )
 
 keybinds.addBehaviour(
-  "KeyS",
+  "KeyH",
   e=>{
-    console.log(Atom.hovering?.molecule)
-    console.log(Atom.hovering?.count_atoms_in_molecule())
-    console.log(Atom.hovering.molecule.classifyCarbonChain())
-    console.log(Atom.hovering.molecule.getBasicNomenclature())
-    Atom.hovering.molecule.ui.update()
+    let pos = camera.getPositionInWorld(camera.mousePosition)
+    pos = pos.snap(gridsize,10)
+    const atm = new Atom(camera,"H",pos) 
   }
 )
 
-keybinds.addBehaviour(
-  "KeyD",
-  e=>{
-    Atom.hovering?.remove()
+function delFunc(){
+  Atom.hovering?.remove()
+  if(Atom.line_hovering){
+    /**
+     * @type {}
+     * @type {Atom}
+     * @type {Atom}
+     */
+    const [line,a1,a2] = Atom.line_hovering
+    a1.molecule.disconnect_once(a1,a2,true)
+    a1.remove_line_with(a2)
+    a1.molecule.ui.update()
+    a1.updateLines()
+    Atom.line_hovering = null
+
   }
-)
+}
+
+
+keybinds.addBehaviour( "KeyD", delFunc)
+keybinds.addBehaviour( "Delete", delFunc)
 
 keybinds.addBehaviour(
   "KeyY",
   e=>{
     console.log(Atom.hovering?.lines)
+    console.log(Atom.hovering?.molecule)
   }
 )
 

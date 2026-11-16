@@ -58,6 +58,16 @@ export class Graph{
         this.adj_list.set(node2,this.adj_list.get(node2).filter(x=>{return x!=node1}))
     }
 
+    disconnect_once(node1,node2){
+        let arr = this.adj_list.get(node1)
+        arr.splice(arr.indexOf(node2),1)
+
+        arr = this.adj_list.get(node2)
+        arr.splice(arr.indexOf(node1),1)
+
+
+    }
+
     /**
      * 
      * @param {any} node1 
