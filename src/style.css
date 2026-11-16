@@ -29,6 +29,12 @@ body{
   box-shadow: 0px 0px 10px black;
 }
 
+.help-btn{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
 .sidebar-btn{
   aspect-ratio: 1;
   width: 40px;
@@ -70,10 +76,15 @@ body{
 
   background-color: rgb(0 0 0 / 0.75);
   width: 20em;
-  height: 10em;
+  min-height: 10em;
   padding: 0.5em;
   border-radius: 0.5em;
   color: white;
+}
+
+
+text{
+  user-select: none;
 }
 
 .popup-hidden{
@@ -84,7 +95,52 @@ hr{
   border-style: solid;
 }
 
+.popup hr{
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
 
 .warning{
   color: rgb(255 220  150);
+}
+
+
+.dialog{
+  border-width: 0px;
+  border-radius: 0.5em;
+  box-shadow: 0px 0px 5px rgba(0 0 0 / 0.2);
+}
+
+.dialog::backdrop{
+  background-color: rgba(0 0 0 / 0.7) ;
+}
+
+.fw-img{
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+.hw-img{
+  width: 45%;
+  display: block;
+  margin: 0 auto;
+}
+
+.maxw500{
+  max-width: 500px;
+}
+
+.maxw600{
+  max-width: 600px;
+}
+
+.smic{
+  width: var(font-size);
+  padding-right: 5px;
+}
+
+.posend{
+  right: 1.5rem;
 }

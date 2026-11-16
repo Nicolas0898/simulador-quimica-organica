@@ -240,10 +240,10 @@ export class Molecule extends Graph {
         }
 
         const sortedMap = new Map(
-            [...dict].sort(([keyA], [keyB]) => { console.log(keyA, keyB, PRIORITYLIST[keyA], PRIORITYLIST[keyB]); return (PRIORITYLIST[keyA] ?? 10) - (PRIORITYLIST[keyB] ?? 10) })
+            [...dict].sort(([keyA], [keyB]) => {return (PRIORITYLIST[keyA] ?? 10) - (PRIORITYLIST[keyB] ?? 10) })
         );
-        console.log("BEFORE MAP: ", dict)
-        console.log("SORTED MAP:", sortedMap)
+        // console.log("BEFORE MAP: ", dict)
+        // console.log("SORTED MAP:", sortedMap)
         return sortedMap;
     }
 

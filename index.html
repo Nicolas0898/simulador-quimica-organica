@@ -18,25 +18,77 @@
 
 
     <g id="camera" transform="translate(0,0)">
-      <rect id="background" stroke="black" width="2000%" height="2000%" fill="url(#patt1)" style="transform: translate(-500%,-500%);" />
-      
-      <text>
-        Pressione C para colocar um carbono!
-      </text>
-      <text y="20">
-        Pressione O para colocar um oxigênio!
-      </text>      
-    </g>    
+      <rect id="background" stroke="black" width="2000%" height="2000%" fill="url(#patt1)"
+        style="transform: translate(-500%,-500%);" />
+    </g>
   </svg>
 
 
   <div class="sidebar" id="sidebar">
   </div>
 
-  
+
+
+  <button class="sidebar-btn help-btn" command="show-modal" commandfor="helpDialog">?</button>
+
   <div class="popup popup-hidden" id="popup"></div>
-  
-  
+
+  <dialog style="width: 60vw; height: 75vh;" class="dialog p-4" id="helpDialog">
+    <h1>Simulador de química orgânica
+
+    <button command="close" commandfor="helpDialog" class="posend btn btn-close position-absolute"></button>
+
+    </h1>
+    <h3>Sobre o projeto:</h3>
+    <p>O simulador de química orgânica é um projeto desenvolvido com o objetivo de auxiliar estudantes do ensino médio nos estudos de propriedades do carbono, propriedades de cadeias e grupos funcionais com visualizações visuais e interativas</p>
+    <img src="/src/img/ex1.png" class="fw-img maxw600">
+    <h3>Como usar:</h3>
+    <p>
+      Para a navegação e a interação o sistema possui quatro modos:
+      <h4><img class="smic" src="/src/icons/hand-index-thumb.svg"> Câmera</h4>
+      <p>
+        Quando esse modo está ativo, ao clicar ou pressionar na tela e arrastá-la a camerâ irá se mover.
+      </p>
+
+      <h4><img class="smic" src="/src/icons/mouse.svg">Edição</h4>
+        Quando esse modo está ativo, ao clicar e arrastar um átomo você irá movê-lo.
+      <h4><img class="smic" src="/src/icons/dash-lg.svg">Linha</h4>
+        Quando esse modo está ativo, ao clicar e arrastar um átomo você irá começar a criar uma linha.<br>
+        Quando você parar de pressionar, a linha criará um novo átomo de carbono onde ela está, caso ela esteja em cima de outro átomo o sistema tentará fazer uma nova conexão com o átomo. 
+      <h4><img class="smic" src="/src/icons/x.svg">Exclusão</h4>
+      <p>
+        Ao clicar em um átomo ou uma conexão com esse modo eles serão deletados.
+      </p>
+    </p>
+
+    <hr>
+
+    <p>
+    Ao desenhar a molécula o sistema irá automáticamente fornecer o nome dela, propriedades dos átomos e propriedades da cadeia.<br> 
+
+    Você pode visualizá-las colocando o mouse sobre o átomo respectivo ou sobre o símbolo &#128712; encontrado na molécula:
+      <img class="hw-img" src="/src/img/ex3-2.png">
+    </p>
+
+    <h4>Atalhos de teclado</h4>
+    <table class="table">
+      <thead class="table-primary">
+        <td>Tecla</td>
+        <td>Ação</td>
+      </thead>
+      <tr> <td>1</td> <td>Seleciona o primeiro modo</td> </tr>
+      <tr> <td>2</td> <td>Seleciona o segundo modo</td> </tr>
+      <tr> <td>3</td> <td>Seleciona o terceiro modo</td> </tr>
+      <tr> <td>4</td> <td>Seleciona o quarto modo</td> </tr>
+      <tr> <td>Espaço</td> <td>Permite mover a câmera sem alterar o modo</tr>
+      <tr> <td>Shift</td> <td>Permite mover um átomo sem alterar o modo</tr>
+      <tr> <td>D ou Delete</td> <td>Deleta o(a) átomo/conexão selecionado(a)</td> </tr>
+      <tr> <td>C</td> <td>Cria um átomo de Carbono na posição do mouse</td> </tr>
+      <tr> <td>O</td> <td>Cria um átomo de Oxigênio na posição do mouse</td> </tr>
+      <tr> <td>H</td> <td>Cria um átomo de Hidrogênio na posição do mouse</td> </tr>
+    </table>
+  </dialog>
+
 
   <script type="module" src="/src/main.js"></script>
 </body>

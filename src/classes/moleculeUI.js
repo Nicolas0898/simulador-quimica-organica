@@ -49,7 +49,7 @@ export class moleculeUI{
         html+="</b><hr>"
 
         if(this.#nomeclature?.supported){
-
+            html+=`<b>Grupo funcional: </b>${this.#nomeclature.group}<br>`
         }else if (this.#nomeclature){
             html+=`<span class="warning"><b>Nomeclatura indisponível:</b> ${this.#nomeclature.reason}<br></span>`
         }
@@ -80,7 +80,7 @@ export class moleculeUI{
         rect.setAttribute("stroke-width",2)
 
         let atms = this.#molecule.count_atoms_in_molecule()
-        let atmsS = ""
+        let atmsS = " "
         let nomeclature = this.#molecule.getBasicNomenclature()
         
         this.#nomeclature = nomeclature
@@ -98,13 +98,17 @@ export class moleculeUI{
         }
         
         if(nomeclature.supported){atmsS+=")"}
-        console.log(atmsS)
+        // console.log(atmsS)
 
 
         const svText = document.createElementNS(svgNS,"text")
+        if(nomeclature.supported)
+            atmsS+=` <tspan fill='rgb(100 100 255)'>&#128712;</tspan>`
+        else
+            atmsS+=` <tspan font-weight="bold" fill='rgb(211, 180, 118)'>&#9888;</tspan>`
         svText.innerHTML = atmsS
         svText.setAttribute("x",bb.x1-padding)
-        svText.setAttribute("y",bb.y1-padding-14)
+        svText.setAttribute("y",bb.y1-padding-10)
 
         this.#elements.push(svText)
 

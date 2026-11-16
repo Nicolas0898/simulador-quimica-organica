@@ -1,4 +1,5 @@
 import './style.css'
+import 'bootstrap/dist/css/bootstrap.css'
 import { svgNS, Point} from './types'
 import { CameraHandler,gridsize } from './user/camera'
 import { KeybindHandler } from './user/keybindHandler'
@@ -30,6 +31,17 @@ keybinds.addBehaviour(
     // camera.dragging = false
     camera.camera.style.cursor = "default";
     UIHandler.setModeActive(lmode )
+  }
+)
+
+keybinds.addBehaviour(
+  "ShiftLeft",
+  e=>{
+    lmode = UIHandler.activeMode
+    UIHandler.setModeActive("Selection")
+  },
+  e=> {
+    UIHandler.setModeActive(lmode)
   }
 )
 
@@ -78,12 +90,7 @@ function delFunc(){
      * @type {Atom}
      */
     const [line,a1,a2] = Atom.line_hovering
-    a1.molecule.disconnect_once(a1,a2,true)
-    a1.remove_line_with(a2)
-    a1.molecule.ui.update()
-    a1.updateLines()
-    Atom.line_hovering = null
-
+    a1.disconnect_once(a2)
   }
 }
 
@@ -128,7 +135,13 @@ UIHandler.addMode("Selection",mouse)
 UIHandler.addMode("Line",dash)
 UIHandler.addMode("Delete",x)
 UIHandler.setModeActive("Selection")
+
+
+document.getElementById("helpDialog").showModal()
 // keybinds.addBehaviour(
+
+
+
 //   "0",
 //   (e)=> {
 //     if(camera.dragging) return

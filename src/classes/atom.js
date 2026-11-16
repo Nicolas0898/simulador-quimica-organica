@@ -96,7 +96,7 @@ export class Atom {
         window.addEventListener("mouseup", this.released.bind(this))
         window.addEventListener("mousemove", this.mouse_moved.bind(this))
         this.svgElement.addEventListener("mouseenter", e => {
-            console.log(UI.activeMode,this.world.mouseDown)
+            // console.log(UI.activeMode,this.world.mouseDown)
             if(UI.activeMode=="Delete" && this.world.mouseDown){
                 this.remove()
             }else{
@@ -340,6 +340,13 @@ export class Atom {
     }
 
 
+    disconnect_once(other){
+        this.molecule.disconnect_once(this,other,true)
+        this.remove_line_with(other)
+        this.molecule.ui.update()
+        this.updateLines()
+        Atom.line_hovering = null
+    }
     /**
      * 
      * @param {Array} lines 
@@ -347,7 +354,11 @@ export class Atom {
      */
     bindLinesToEvent(lines,other){
         for(const line of lines){
+            line.addEventListener("click",e=>{
+                if(UI.activeMode == "Delete"){ this.disconnect_once(other) }
+            })
              line.addEventListener("mouseenter",e=>{
+                // if(UI.activeMode == "Delete"){ this.disconnect_once(other); return}
                 Atom.line_hovering = [line,this,other]
                 line.setAttribute("stroke","rgb(100 200 255)")
              })
