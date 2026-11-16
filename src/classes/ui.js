@@ -1,8 +1,11 @@
 import { Point } from "../types"
-import { CameraHandler } from "../user/camera"
+import { CameraHandler, gridsize } from "../user/camera"
+import { Atom } from "./atom"
 
 class UI{
     #popupActive = false
+    /**@type {HTMLDivElement} */
+    #topbar
     /**@type {HTMLDivElement} */
     #sidebar
     /**@type {HTMLDivElement} */
@@ -10,11 +13,17 @@ class UI{
     activeFunction = null
     activeMode
     #modes = []
+    /** @type {CameraHandler} */
+    world
+
+    setWorld(world){
+        this.world = world
+    }
 
     constructor(){
         this.#sidebar = document.getElementById("sidebar")
         this.#popup = document.getElementById("popup")
-
+        this.#topbar = document.getElementById("topbar")
     }
         
     isPopupActive(){
@@ -74,6 +83,22 @@ class UI{
 
         this.#sidebar.appendChild(btn)
         this.#modes.push([name,btn])
+    }
+
+    addAtomToTopbar(symbol){
+        let btn = document.createElement("button")
+
+
+        btn.addEventListener("click",e=>{
+            // let camerapos = this.world.camerapos.multiply_scalar(-1)
+            let screensize = this.world.getPositionInWorld(new Point(window.innerWidth/2,window.innerHeight/2))
+            let finalpos = screensize 
+            new Atom(this.world,symbol,finalpos.snap(gridsize,10))
+        })
+
+        btn.textContent = symbol
+        btn.classList.add("sidebar-btn")
+        this.#topbar.appendChild(btn)
     }
 
     setModeActive(name){

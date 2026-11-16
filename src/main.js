@@ -125,7 +125,7 @@ keybinds.addBehaviour(
 
 
 
-
+UIHandler.setWorld(camera)
 import hand from './icons/hand-index-thumb.svg'
 import dash from './icons/dash-lg.svg'
 import mouse from './icons/mouse.svg'
@@ -136,40 +136,9 @@ UIHandler.addMode("Line",dash)
 UIHandler.addMode("Delete",x)
 UIHandler.setModeActive("Selection")
 
+UIHandler.addAtomToTopbar("C")
+UIHandler.addAtomToTopbar("H")
+UIHandler.addAtomToTopbar("O")
 
 document.getElementById("helpDialog").showModal()
-// keybinds.addBehaviour(
-
-
-
-//   "0",
-//   (e)=> {
-//     if(camera.dragging) return
-//     let pos = camera.getPositionInWorld(camera.mousePosition)
-//     startpoint = pos
-//     pos.snap(gridsize,10)
-
-//     line = document.createElementNS(svgNS,"line")
-//     camera.add(line)
-    
-//   },
-//   (e)=>{
-//     if (!line) return
-//     let pos = camera.getPositionInWorld(camera.mousePosition)
-//     pos.snap(gridsize,10)
-//     updateLine(pos)
-//     line = null
-    
-//   }
-// )
-
-
-// window.addEventListener("mousemove",()=>{
-//     if(line){
-//       let pos = camera.getPositionInWorld(camera.mousePosition)
-//       pos.snap(gridsize,10)
-//       updateLine(pos)
-//     }
-// })
-
 console.log(atoms)
